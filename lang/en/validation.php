@@ -168,16 +168,35 @@ return [
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
     |--------------------------------------------------------------------------
-    |
     | Here you may specify custom validation messages for attributes using the
     | convention "attribute.rule" to name the lines. This makes it quick to
     | specify a specific custom language line for a given attribute rule.
-    |
     */
 
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+        ],
+        'name' => [
+            'required' => 'The name field is required.',
+            'string' => 'The name must be a valid string.',
+            'max' => 'The name cannot be greater than :max characters.',
+        ],
+        'email' => [
+            'required' => 'The email address is required.',
+            'string' => 'The email must be a valid string.',
+            'lowercase' => 'The email must be in lowercase.',
+            'email' => 'Please provide a valid email address.',
+            'max' => 'The email may not be greater than :max characters.',
+            'unique' => 'This email address is already in use.',
+        ],
+        'role' => [
+            'required' => 'Please select a role.',
+            'in' => 'The selected role is invalid.',
+        ],
+        'password' => [
+            'required' => 'A password is required.',
+            'confirmed' => 'The password confirmation does not match.',
         ],
     ],
 

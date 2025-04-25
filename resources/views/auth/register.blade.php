@@ -18,6 +18,18 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!--Role -->
+        <div class="mt-4">
+            <x-input-label for="role" :value="__('Choose your role')" />
+            <select name="role" id="role"
+                class="border-blue-100 focus:border-blue-200 focus:ring-blue-200 rounded-md shadow-sm w-full">
+                <option value="" selected>Choose a rol</option>
+                <option value="1" {{ @old('role') === '1' ? 'selected' : '' }}>Recruiter - Post jobs</option>
+                <option value="2" {{ @old('role') === '2' ? 'selected' : '' }}>Developer - Search for jobs</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />

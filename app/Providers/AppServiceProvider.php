@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new MailMessage)
+                ->subject("Confirm you account in " . env('APP_NAME'))
+                ->greeting("Thanks for joining us!")
+                ->line("Your account is almost ready. Click the following button to active your account.")
+                ->action("Activate Account", $url)
+                ->line("If you did not create this account, you can ignore this message.")
+            ;
+        });
     }
 }
