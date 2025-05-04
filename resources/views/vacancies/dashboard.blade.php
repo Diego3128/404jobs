@@ -12,9 +12,13 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    {{ __('Vacancies.........') }}
+                    <livewire:vacancy-list />
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        @vite('resources/js/dashboard.js')
+    @endpush
 </x-app-layout>

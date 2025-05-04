@@ -12,6 +12,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [VacancyController::class, 'index'])->name('vacancies.index');
     Route::get('/vacancy/create', [VacancyController::class, 'create'])->name('vacancies.create');
+    Route::get('/vacancy/{vacancy}/edit', [VacancyController::class, 'edit'])->name('vacancies.edit')->middleware(['can:update,vacancy']);
 });
 
 // Profile

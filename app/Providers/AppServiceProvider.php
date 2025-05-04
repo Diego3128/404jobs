@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Vacancy;
+use App\Observers\VacancyObserver;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Vacancy::observe(VacancyObserver::class);
+
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
             return (new MailMessage)
                 ->subject("Confirm you account in " . env('APP_NAME'))
