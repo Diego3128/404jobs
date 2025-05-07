@@ -7,9 +7,11 @@ use App\Models\Salary;
 use App\Models\Vacancy;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Throwable;
 
 class EditVacancy extends Component
 {
@@ -72,21 +74,26 @@ class EditVacancy extends Component
     }
     public function updateVacancy()
     {
-        $data = $this->validate();
-        $vacancy = Vacancy::find($this->vacancyId);
+        try {
+            $data = $this->validate();
+            $vacancy = Vacancy::find($this->vacancyId);
 
-        $vacancy->update([
-            'title' => $data['title'],
-            'salary_id' => $data['salary'],
-            'category_id' => $data['category'],
-            'company' => $data['company'],
-            'description' => $data['description'],
-            'deadline' => $data['deadline'],
-            'image' => $this->handleImageUpload($vacancy)
-        ]);
+            Gate::authorize('update', $vacancy);
 
-        Session::flash('success', 'Vacancy updated.');
-        return redirect()->route('vacancies.index');
+            $vacancy->update([
+                'title' => $data['title'],
+                'salary_id' => $data['salary'],
+                'category_id' => $data['category'],
+                'company' => $data['company'],
+                'description' => $data['description'],
+                'deadline' => $data['deadline'],
+                'image' => $this->handleImageUpload($vacancy)
+            ]);
+            Session::flash('success', 'Vacancy updated.');
+            return redirect()->route('vacancies.index');
+        } catch (Throwable $e) {
+            return redirect()->route('vacancies.index')->with('error', 'Vacancy not updated.');
+        }
     }
 
     public function updated($propertyName)

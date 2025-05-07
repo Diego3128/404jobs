@@ -6,8 +6,10 @@ use App\Models\Category;
 use App\Models\Salary;
 use App\Models\Vacancy;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Throwable;
 
 class CreateVacancy extends Component
 {
@@ -36,25 +38,29 @@ class CreateVacancy extends Component
 
     public function createVacancy()
     {
-        $data = $this->validate();
-        // save image
-        $imageName = $this->image->store('vacancies', 'public');
-        // keep only image name with extension
-        $imageName = str_replace('vacancies/', '', $imageName);
-
-        // save vacancy
-        Vacancy::create([
-            'title' => $data['title'],
-            'company' => $data['company'],
-            'deadline' => $data['deadline'],
-            'description' => $data['description'],
-            'image' => $imageName,
-            'salary_id' => $data['salary'],
-            'category_id' => $data['category'],
-            'user_id' => Auth::user()->id
-        ]);
-        // redirect with message
-        return redirect()->route('vacancies.index')->with('success', 'A new vacancy was created.');
+        try {
+            Gate::authorize('create', Vacancy::class);
+            $data = $this->validate();
+            // save image
+            $imageName = $this->image->store('vacancies', 'public');
+            // keep only image name with extension
+            $imageName = str_replace('vacancies/', '', $imageName);
+            // save vacancy
+            Vacancy::create([
+                'title' => $data['title'],
+                'company' => $data['company'],
+                'deadline' => $data['deadline'],
+                'description' => $data['description'],
+                'image' => $imageName,
+                'salary_id' => $data['salary'],
+                'category_id' => $data['category'],
+                'user_id' => Auth::user()->id
+            ]);
+            // redirect with message
+            return redirect()->route('vacancies.index')->with('success', 'A new vacancy was created.');
+        } catch (Throwable $e) {
+            return redirect()->route('vacancies.index')->with('error', 'Vacancy not created.');
+        }
     }
 
     public function mount()

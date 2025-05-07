@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class VacancyController extends Controller
 {
@@ -12,6 +13,7 @@ class VacancyController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Vacancy::class);
         return view('vacancies.dashboard');
     }
 
@@ -20,14 +22,15 @@ class VacancyController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Vacancy::class);
         return view('vacancies.create');
     }
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Vacancy $vacancy)
     {
-        //
+        return view('vacancies.show', compact('vacancy'));
     }
 
     /**

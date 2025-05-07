@@ -13,7 +13,8 @@ class VacancyPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        // only admins can access
+        return $user->role == 1;
     }
 
     /**
@@ -29,7 +30,7 @@ class VacancyPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role == 1;
     }
 
     /**
