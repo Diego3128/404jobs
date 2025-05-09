@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Candidate;
 use App\Models\Vacancy;
+use App\Notifications\NewCandidate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Rule;
@@ -38,8 +39,9 @@ class ApplyForVacancy extends Component
             ]);
             // flash message
             session()->flash('info', 'Your info was sent successfully. Good luck!');
+            // the notification is for the user (owner of the post)
+            $this->vacancy->recruiter->notify(new NewCandidate($this->vacancy->id, $this->vacancy->title, Auth::user()->id));
             return redirect()->route('vacancies.show', ['vacancy' => $this->vacancy->id]);
-            // notification
         } catch (Throwable $e) {
             session()->flash('error', 'Something went wrong applying for this vacancy.');
             return redirect()->route('vacancies.show', ['vacancy' => $this->vacancy->id]);

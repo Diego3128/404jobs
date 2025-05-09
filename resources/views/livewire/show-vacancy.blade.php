@@ -51,9 +51,9 @@
     @endguest
 
     {{-- form to apply for a vacancy (only for devs) --}}
-
-    @cannot('create', \App\Models\Vacancy::class)
-        <livewire:apply-for-vacancy :vacancy="$vacancy" />
-    @endcannot
-
+    @auth
+        @cannot('create', \App\Models\Vacancy::class)
+            <livewire:apply-for-vacancy :vacancy="$vacancy" />
+        @endcannot
+    @endauth
 </div>

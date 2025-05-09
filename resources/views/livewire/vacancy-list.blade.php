@@ -2,7 +2,8 @@
     <div
         class="grid grid-cols-1 min-[480px]:grid-cols-2 sm:grid-cols-3  lg:grid-cols-4 gap-3 md:gap-5 relative min-h-96 select-none">
         @forelse ($vacancies as $vacancy)
-            <div class="space-y-4 border-2 border-gray-300 rounded-lg shadow shadow-gray-300 py-4 px-2.5">
+            <div wire:key="{{ $vacancy->id }}"
+                class="space-y-4 border-2 border-gray-300 rounded-lg shadow shadow-gray-300 py-4 px-2.5">
                 <a href="{{ route('vacancies.show', ['vacancy' => $vacancy->id]) }}"
                     class="block border-l-4 border-l-indigo-600 rounded-tl-sm rounded-bl-sm pl-3 bg-indigo-50 text-gray-900 capitalize text-lg truncate">
                     {{ $vacancy->title }}</a>

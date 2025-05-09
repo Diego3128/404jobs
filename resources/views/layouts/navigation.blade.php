@@ -12,20 +12,44 @@
 
                 <!-- Navigation Links -->
                 @auth
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('vacancies.index')" :active="request()->routeIs('vacancies.index')">
-                            {{ __('Vacancies') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('vacancies.create')" :active="request()->routeIs('vacancies.create')">
-                            {{ __('Create Vacancy') }}
-                        </x-nav-link>
-                    </div>
+                    @can('create', \App\Models\Vacancy::class)
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <x-nav-link :href="route('vacancies.index')" :active="request()->routeIs('vacancies.index')">
+                                {{ __('Vacancies') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('vacancies.create')" :active="request()->routeIs('vacancies.create')">
+                                {{ __('Create Vacancy') }}
+                            </x-nav-link>
+                        </div>
+                    @endcan
                 @endauth
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 @auth
+                    @can('create', \App\Models\Vacancy::class)
+                        @php
+                            $unreadNotifications = Auth::user()->unreadNotifications->count();
+                            $unreadNotifications = $unreadNotifications > 9 ? '+9' : $unreadNotifications;
+                        @endphp
+                        @if ($unreadNotifications)
+                            <div class="relative hover:opacity-85">
+                                <a href="{{ route('notifications') }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                                    </svg>
+                                    <p
+                                        class="absolute -top-3 -left-4 w-6 h-6 rounded-full bg-blue-400 text-white flex justify-center items-center text-[13px]">
+                                        {{ $unreadNotifications }}</p>
+                                </a>
+                            </div>
+                        @endif
+                    @endcan
+
+
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -95,7 +119,21 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center sm:hidden relative">
+
+                @auth
+                    @can('create', \App\Models\Vacancy::class)
+                        @if ($unreadNotifications)
+                            <a href="">
+                                <p
+                                    class="absolute top-2 -left-3 w-6 h-6 rounded-full bg-blue-400 text-white flex justify-center items-center text-[11px]">
+                                    {{ $unreadNotifications }}</p>
+                            </a>
+                        @endif
+                    @endcan
+                @endauth
+
+
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -113,14 +151,29 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         @auth
-            <div class="pt-2 pb-3 space-y-1">
-                <x-responsive-nav-link :href="route('vacancies.index')" :active="request()->routeIs('vacancies.index')">
-                    {{ __('Vacancies') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('vacancies.create')" :active="request()->routeIs('vacancies.create')">
-                    {{ __('Create Vacancy') }}
-                </x-responsive-nav-link>
-            </div>
+            @can('create', \App\Models\Vacancy::class)
+                <div class="pt-2 pb-3 space-y-1">
+                    <x-responsive-nav-link :href="route('vacancies.index')" :active="request()->routeIs('vacancies.index')">
+                        {{ __('Vacancies') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('vacancies.create')" :active="request()->routeIs('vacancies.create')">
+                        {{ __('Create Vacancy') }}
+                    </x-responsive-nav-link>
+                    <div class="relative">
+                        <x-responsive-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')">
+                            {{ __('Notifications') }}
+                        </x-responsive-nav-link>
+                        @if ($unreadNotifications)
+                            <a href="">
+                                <p
+                                    class="absolute top-2 right-3 w-6 h-6 rounded-full bg-blue-400 text-white flex justify-center items-center text-[11px]">
+                                    {{ $unreadNotifications }}</p>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            @endcan
+
         @endauth
 
         @guest

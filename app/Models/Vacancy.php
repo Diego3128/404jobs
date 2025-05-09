@@ -25,7 +25,7 @@ class Vacancy extends Model
         ];
     }
 
-    public function user(): BelongsTo
+    public function recruiter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }

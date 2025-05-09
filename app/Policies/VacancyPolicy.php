@@ -38,7 +38,7 @@ class VacancyPolicy
      */
     public function update(User $user, Vacancy $vacancy): bool
     {
-        return $vacancy->user->id === $user->id;
+        return $vacancy->recruiter->id === $user->id;
     }
 
     /**
@@ -46,7 +46,7 @@ class VacancyPolicy
      */
     public function delete(User $user, Vacancy $vacancy): bool
     {
-        return $vacancy->user->id === $user->id;
+        return $vacancy->recruiter->id === $user->id;
     }
 
     /**
