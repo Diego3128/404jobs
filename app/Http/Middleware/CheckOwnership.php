@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckUserRole
+class CheckOwnership
 {
     /**
      * Handle an incoming request.
@@ -15,10 +15,8 @@ class CheckUserRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // only recruiters can pass // recruiters role == 1
-        if ($request->user()->role == 2) {
-            return redirect()->route('home');
-        }
+        dd($request);
+        // only creator of the vacancy can pass
         return $next($request);
     }
 }

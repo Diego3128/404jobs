@@ -38,9 +38,9 @@ class CreateVacancy extends Component
 
     public function createVacancy()
     {
+        $data = $this->validate();
         try {
             Gate::authorize('create', Vacancy::class);
-            $data = $this->validate();
             // save image
             $imageName = $this->image->store('vacancies', 'public');
             // keep only image name with extension
@@ -59,6 +59,7 @@ class CreateVacancy extends Component
             // redirect with message
             return redirect()->route('vacancies.index')->with('success', 'A new vacancy was created.');
         } catch (Throwable $e) {
+            // dd($e);
             return redirect()->route('vacancies.index')->with('error', 'Vacancy not created.');
         }
     }

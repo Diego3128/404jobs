@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,8 +18,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/vacancy/{vacancy}', [VacancyController::class, 'show'])->name('vacancies.show')->withoutMiddleware(['auth', 'verified']);
 });
-// Notifications
-Route::get('/notifications', NotificationController::class)->name('notifications')->middleware(['auth', 'verified', 'checkrole']);
+// Notifications and candidates
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifications', NotificationController::class)->name('notifications')->middleware(['checkrole']);
+
+    Route::get('/candidates/{vacancy}', [CandidateController::class, 'index'])->name('candidates.index')->middleware(['can:view,vacancy']);
+});
+
+
 // Profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

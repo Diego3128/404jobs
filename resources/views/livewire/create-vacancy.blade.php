@@ -50,7 +50,7 @@
     <div>
         <x-input-label for="deadline" :value="__('Last day to apply')" />
         <input class="border-blue-100 focus:border-blue-200 focus:ring-blue-200 rounded-md shadow-sm w-full"
-            type="date" wire:model.difer="deadline" id="deadline" value="{{ @old('deadline') }}">
+            type="date" wire:model.difer="deadline" id="deadline">
         @error('deadline')
             <livewire:warning-alert :messages="$errors->get('deadline')" />
         @enderror

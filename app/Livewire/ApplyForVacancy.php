@@ -6,6 +6,7 @@ use App\Models\Candidate;
 use App\Models\Vacancy;
 use App\Notifications\NewCandidate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
@@ -16,18 +17,27 @@ class ApplyForVacancy extends Component
 {
     use LivewireWithFileUploads;
 
-    #[Rule('required|mimes:pdf')]
+    #[Rule('required|mimes:pdf|max:2024')]
     public $cv;
 
     public $vacancy;
 
+    public $canApply;
+
     public function createCandidate()
     {
-        $data = $this->validate();
-
+        $data = $this->validateOnly('cv');
         try {
             // admins cannot create candidates
-            Gate::denies('create', Vacancy::class);
+            if (!Gate::denies('create', Vacancy::class)) {
+                session()->flash('error', 'You are not allowed to apply for this vacancy.');
+                return redirect()->route('vacancies.show', ['vacancy' => $this->vacancy->id]);
+            }
+            // Double-check if the candidate already exists before creating
+            if ($this->hasApplied()) {
+                session()->flash('info', 'You have already applied for this vacancy.');
+                return redirect()->route('vacancies.show', ['vacancy' => $this->vacancy->id]);
+            }
             // save cv in storage\app\public\candidate_cv
             $cvName = $this->cv->store('candidate_cv', 'public');
             // keep only the file name
@@ -51,6 +61,13 @@ class ApplyForVacancy extends Component
     public function mount(Vacancy $vacancy)
     {
         $this->vacancy = $vacancy;
+        $this->canApply = !$this->hasApplied();
+    }
+
+    public function hasApplied(): bool
+    {
+        // Check if the user has already applied for this vacancy
+        return Candidate::where('vacancy_id', '=', $this->vacancy->id)->where('user_id', '=', Auth::user()->id)->exists();
     }
     public function render()
     {

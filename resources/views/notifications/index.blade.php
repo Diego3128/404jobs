@@ -15,12 +15,13 @@
                     @forelse ($notifications as $notification)
                         <div class="sm:flex justify-between border border-gray-200 rounded-lg p-2 mb-2 text-gray-600">
                             <div class="flex-1 overflow-hidden">
-                                <p class="line-clamp-1">New candidate for: <span class="font-bold">sdjsdo sodjksod
+                                <p class="line-clamp-1">New candidate for: <span class="font-bold">
                                         {{ $notification->data['vacancy_title'] }}</span></p>
                                 <p>{{ $notification->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="flex-1 flex items-center justify-end">
-                                <a class="bg-slate-800 rounded-lg p-2 text-gray-400 hover:opacity-85" href="#">See
+                                <a class="bg-slate-800 rounded-lg p-2 text-gray-400 hover:opacity-85"
+                                    href="{{ route('candidates.index', ['vacancy' => $notification->data['vacancy_id']]) }}">See
                                     candidates</a>
                             </div>
                         </div>

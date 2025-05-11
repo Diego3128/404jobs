@@ -27,8 +27,15 @@
                     {{ $vacancy->created_at->isoFormat('D MMMM YYYY') }}
                 </p>
                 <div class="space-y-3">
-                    <a href="#" draggable="false"
-                        class="block p-2 text-sm text-center rounded-lg text-white bg-slate-700 hover:opacity-90">Candidates</a>
+                    @php
+                        $candidateNum = $vacancy->candidates->count();
+                        $candidateNum = $candidateNum > 100 ? '+100' : $candidateNum;
+                    @endphp
+                    <a href="{{ route('candidates.index', ['vacancy' => $vacancy]) }}" draggable="false"
+                        class="block p-2 text-sm text-center rounded-lg text-white bg-slate-700 hover:opacity-90 relative">Candidates
+                        <span
+                            class="absolute -top-2 right-0 bg-slate-700 rounded-lg p-1 text-xs  z-10 min-w-7">{{ $candidateNum }}</span>
+                    </a>
 
                     <a href="{{ route('vacancies.edit', ['vacancy' => $vacancy->id]) }}" draggable="false"
                         class="block p-2 text-sm text-center rounded-lg text-white bg-blue-500 hover:opacity-90">Edit</a>

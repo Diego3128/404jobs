@@ -22,7 +22,7 @@ class VacancyPolicy
      */
     public function view(User $user, Vacancy $vacancy): bool
     {
-        return false;
+        return $user->id == $vacancy->user_id;
     }
 
     /**
