@@ -1,14 +1,13 @@
 <?php
 
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VacancyController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', HomeController::class)->name('home');
 
 // Vacancy
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -20,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 // Notifications and candidates
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/notifications', NotificationController::class)->name('notifications')->middleware(['checkrole']);
 
     Route::get('/candidates/{vacancy}', [CandidateController::class, 'index'])->name('candidates.index')->middleware(['can:view,vacancy']);

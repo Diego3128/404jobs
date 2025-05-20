@@ -43,9 +43,4 @@ class VacancyList extends Component
 
         return view('livewire.vacancy-list', ['vacancies' => $vacancies]);
     }
-
-    // public function paginationView()
-    // {
-    //     return 'vendor.livewire.tailwind';
-    // }
 }

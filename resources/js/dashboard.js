@@ -4,6 +4,7 @@ function startApp() {
     startCloseBtn();
     createNotifications();
     autoDeleteNotification();
+    startCopyBtn();
 }
 
 function autoDeleteNotification(notification = null) {
@@ -62,3 +63,18 @@ function createNotifications() {
         autoDeleteNotification(notification);
     });
 };
+
+function startCopyBtn() {
+    const vacancyList = document.querySelector('.vacancy-list') || null;
+    if (!vacancyList) return;
+    vacancyList.addEventListener('click', (e) => {
+        const { target } = e;
+        if (target.classList.contains('copy-btn') && target.nextElementSibling.classList.contains('vacancy-link')) {
+            // copy href attribute to clip-board
+            const linkElement = target.nextElementSibling;
+            navigator.clipboard.writeText(linkElement.href);
+            // .then(() => alert('copied')).catch(() => alert('failed'))
+            // show small noticide under the clip
+        }
+    })
+}

@@ -20,7 +20,7 @@
                                 <p>{{ $notification->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="flex-1 flex items-center justify-end">
-                                <a class="bg-slate-800 rounded-lg p-2 text-gray-400 hover:opacity-85"
+                                <a class="bg-slate-800 rounded-lg p-2 text-gray-400 hover:opacity-85" target="_blank"
                                     href="{{ route('candidates.index', ['vacancy' => $notification->data['vacancy_id']]) }}">See
                                     candidates</a>
                             </div>
